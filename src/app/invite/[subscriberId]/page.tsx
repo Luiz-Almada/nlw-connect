@@ -4,13 +4,22 @@ import { Copy, Link } from 'lucide-react'
 
 import Image from 'next/image'
 
-import logo from '../../assets/logo.svg'
+import logo from '../../../assets/logo.svg'
 import { InviteLinkInput } from './invite-link-input'
 import { Ranking } from './ranking'
 import { Stats } from './stats'
 
-export default function InvitePage() {
-  const inviteLink = 'http://localhost:3000/invite/1297197291fjosf090eq'
+// No Next, apenas arquivos com nome Page.tsx tem acesso a 'params' da rota
+interface InvitePageProps {
+  params: Promise<{
+    subscriberId: string
+  }>
+}
+
+export default async function InvitePage(props: InvitePageProps) {
+  const { subscriberId } = await props.params
+
+  const inviteLink = `http://localhost:3333/invites/${subscriberId}`
   return (
     <div className="min-h-dvh flex items-center justify-between gap-16 flex-col md:flex-row">
       <div className="flex flex-col gap-10 w-full max-w-[550px]">
@@ -37,7 +46,8 @@ export default function InvitePage() {
           </div>
 
           <InviteLinkInput inviteLink={inviteLink} />
-          <Stats />
+          
+          <Stats subscriberId={subscriberId} />
         </div>
       </div>
 
